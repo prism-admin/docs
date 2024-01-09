@@ -1,0 +1,160 @@
+---
+title: 'Jinja + YAML'
+description: Augment your YAML with Jinja
+---
+
+## Introduction
+
+  Agents are configured using a YAML file. If you're totally new to YAML files, you can
+  learn more about them [here](https://www.redhat.com/en/topics/automation/what-is-yaml).
+
+  In Alto, you can augment your YAML configuration files and Python tasks using Jinja, a
+  powerful templating language. For example, using Jinja enables you to:
+  - Create relative variables (e.g., relative paths)
+  - Use environment variables for production deployments
+
+  Here are the list of available Jinja functions:
+  - `__platform__`
+  - `__version__`
+  - `__file__`
+  - `Path`
+  - `wkdir()`
+  - `parent_dir(path)`
+  - `concat(str1, str2)`
+  - `env(var)`
+
+  We'll cover these next.
+
+## Jinja Functions
+
+  <Accordion title="__platform__">
+    `{{ __platform__ }}` returns the operating system on which your project is running. It's
+    identical to sys.platform. You probably won't use this much in your projects.
+
+    Example:
+    ```yaml alto.yml
+    "my-agent-{{ platform }}":
+      infra:
+        type: ec2
+        ...
+    ```
+  </Accordion>
+
+  <Accordion title="__version__">
+    `{{ __version__ }}` returns the Python version on which your project is running, in
+    the format `"{major}.{minor}.{micro}"`. As with `__platform__`, you probably won't use
+    this much in your projects.
+
+    Example:
+    ```yaml alto.yml
+    "my-agent-{{ version }}":
+      infra:
+        type: ec2
+        ...
+    ```
+  </Accordion>
+
+  <Accordion title="__file__ and Path">
+    `{{ __file__ }}` allows you to access the the path to the YAML file.
+    
+    `{{ Path(...) }}` allows you convert any string to a pathlib
+    [Path](https://docs.python.org/3/library/pathlib.html) object. When using this Jinja
+    function, users also get access to Path's methods and operators.
+    
+    `{{ __file__ }}` and `{{ Path(...) }}` can be used together to define relative paths.
+
+    Example:
+    ```yaml alto.yml
+    my_cloud_agent:
+      infra:
+        type: ec2
+        instance_type: t2.micro
+        ami_image: ami-01c647eace872fc02
+      entrypoint:
+        type: function
+        cmd: main.write_txt_file
+        kwargs:
+          output_dir: "{{ Path(__file__) / 'output' }}"
+    ```
+  </Accordion>
+
+  <Accordion title="wkdir()">
+    `{{ wkdir() }}` allows you to access the current project directory as a string. This is a
+    less powerful alternative to `{{ Path(__file__) }}`.
+
+    Example:
+    ```yaml alto.yml
+    my_cloud_agent:
+      infra:
+        type: ec2
+        instance_type: t2.micro
+        ami_image: ami-01c647eace872fc02
+      entrypoint:
+        type: function
+        cmd: main.write_txt_file
+        kwargs:
+          output_dir: "{{ wkdir() }}/output"
+    ```
+  </Accordion>
+
+  <Accordion title="parent_dir()">
+    `{{ parent_dir(path) }}` computes the parent path of path as a string. This is a less
+    powerful alternative to `{{ Path(__file__).parent }}`.
+
+    Example:
+    ```yaml alto.yml
+    my_cloud_agent:
+      infra:
+        type: ec2
+        instance_type: t2.micro
+        ami_image: ami-01c647eace872fc02
+      entrypoint:
+        type: function
+        cmd: main.write_txt_file
+        kwargs:
+          output_dir: "{{ parent_dir(wkdir()) }}"
+    ```
+  </Accordion>
+
+  <Accordion title="concat()">
+    `{{ concat(str1, str2) }}` concatenates str1 and str2 together and returns the 
+    output as a string.
+
+    Example:
+    ```yaml alto.yml
+    my_cloud_agent:
+      infra:
+        type: ec2
+        instance_type: t2.micro
+        ami_image: ami-01c647eace872fc02
+      entrypoint:
+        type: function
+        cmd: main.write_txt_file
+        kwargs:
+          output_dir: "{{ concat(parent_dir(wkdir()), '/output') }}"
+    ```
+  </Accordion>
+
+  <Accordion title="env()">
+    `{{ env(var) }}` returns the environment variable var. This is probably the most 
+    useful Jinja function.
+
+    Example:
+    ```yaml alto.yml
+    my_cloud_agent:
+      infra:
+        type: ec2
+        instance_type: t2.micro
+        ami_image: ami-01c647eace872fc02
+      entrypoint:
+        type: function
+        cmd: main.write_txt_file
+        kwargs:
+          output_dir: "{{ Path(__file__).parent / 'output' }}" 
+      requirements: requirements.txt
+      env:
+        AWS_ACCESS_KEY_ID: "{{ env('AWS_ACCESS_KEY_ID') }}"
+        AWS_SECRET_ACCESS_KEY: "{{ env('AWS_SECRET_ACCESS_KEY') }}"
+        AWS_DEFAULT_REGION: "{{ env('AWS_DEFAULT_REGION') }}"
+    ```
+  </Accordion>

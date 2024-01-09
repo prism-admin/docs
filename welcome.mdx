@@ -1,0 +1,81 @@
+---
+title: 'Welcome to Alto'
+sidebarTitle: "Welcome"
+---
+<Check>These docs are current for version ```v0.0.5.```</Check>
+
+Welcome to Alto! Alto is the easiest way to run your code on the cloud. Although
+primarily designed for [Prism](https://runprism.com) projects, Alto can be used to execute any arbitrary code
+(e.g., a function, a script, a Jupyter notebook, or an entire project) in custom cloud
+environments.
+
+At the moment, Alto is BYOC - bring your own cloud. You supply the cloud account, and
+Alto will take care of provisioning the exact resources required. In future versions,
+we'll offer the option for users to run their code on Alto's own infrastructure.
+
+## CHANGELOG
+
+Alto used to be called Nomad. Here are the main differences between this version and the
+previous version (```nomad v0.0.4```):
+  <Accordion title="Support for Docker images">
+      In previous versions of Alto, users could only run their code on the agent's 
+      runtime environment itself. In this version, users can run their code in a Docker 
+      image inside the agent. They can do so with the ```image``` key:
+
+      ```yaml
+      my_agent_name:
+        infra:
+          - type: ec2
+          ...
+        image:
+          type: docker
+          base: python:3.10.8-slim-bullseye
+          registry: dockerhub
+          registry_creds:
+            username: ...
+            password: ...
+        requirements: ...
+      ...
+      ```
+      The description for each of these nested keys can be found [here]().
+  </Accordion>
+
+## Why use Alto?
+
+  Great question! Alto allows users to easily scale their code from their local machine to
+  the cloud. There are several scenarios in which this can be helpful:
+
+  - **Dependency management**: let's say your project relies on a package version that isn't
+  compatible with your current version of Python. Rather than having to rollback your
+  local Python installation or install another version of Python on your machine, you can
+  run your code with Alto with a pre-specified Python version.
+
+  - **Scalability**: certain agents (e.g., EC2 instances, EMR clusters) allow you to scale your
+  project's execution vertically and horizontally. You can choose instance types with
+  varying compute power to match your project's resource requirements. Additionally, you
+  can leverage auto-scaling capabilities to automatically adjust the number of instances
+  based on demand.
+
+  - **Collaboration**: we've all heard the age-old phrase "but it works on my machine!" When
+  working with a team, it's likely that different team members will have different system
+  configurations and environments. As a result, projects may work on one developer's
+  machine but fail on others. Alto mitigate against this this, ensuring that their code
+  runs consistently across different systems.
+
+  - **Deployment**: Alto allow users to test their projects whatever infrastructure they like.
+  If your organization uses custom infrastructure, then this helps ensure that your
+  projects do not break once they are deployed.
+
+## Guides: Jump right in
+
+  <Card title="Quickstart" icon="leaf" href="/quickstart">
+    Install and create your first Alto project
+  </Card>
+
+  <Card title="Agents" icon="rocket" href="/agents/overview">
+    Configure your cloud infrastrastructure via an agent
+  </Card>
+
+  <Card title="CLI" icon="code" href="/cli/overview">
+    Manage your project via our powerful CLI
+  </Card>

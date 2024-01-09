@@ -1,0 +1,37 @@
+---
+title: 'Introduction'
+description: Learn how to configure your agent in YAML
+---
+
+## Overview
+  Agents are configured using a YAML file. The file should define:
+  - The infrastructure to use (e.g., an EC2 instance)
+  - Actions to perform within the infrastructure (e.g., installing custom Linux packages)
+  - Your project's dependencies (i.e., Python packages)
+  - Your project's entrypoint (i.e., what command to use to actually execute your project)
+  - Environment variables
+  - Files to download upon the project's completion
+
+## Example
+  Here's an example configuration file:
+  ```yaml alto.yml
+  my_cloud_agent:
+    infra:
+      type: ec2  
+      instance_type: t2.micro
+      ami_image: ami-0889a44b331db0194
+    requirements: requirements.txt
+    entrypoint:
+      type: script
+      cmd: python <script name>.py --arg1 VALUE1
+    env:
+      ENV_VAR1: "{{ env('ENV_VAR1') }}"
+      ...: ...
+    download_files:
+      - ...
+      - ...
+    post_build_cmds:
+      - ...
+  ```
+
+  Let's break this down next.

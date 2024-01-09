@@ -1,78 +1,78 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Alto Documentation",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/alto.png",
+    "light": "/logo/alto.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/cloud.png",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#1D597D",
+    "light": "#83B6B9",
+    "dark": "#1D597D",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#1D597D",
+      "to": "#83B6B9"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:hello@runprism.com"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Get Started",
+    "type": "link",
+    "url": "https://github.com/runprism/alto"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/runprism/alto"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": [ "welcome", "quickstart"]
     },
     {
-      "group": "Essentials",
-      "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
-    },
-    {
-      "group": "API Documentation",
-      "pages": ["api-reference/introduction"]
-    },
-    {
-      "group": "Endpoint Examples",
+      "group": "Agents",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "agents/overview",
+        {
+          "group": "Configuration",
+          "pages": [
+            "agents/configuration/introduction",
+            "agents/configuration/jinja_yaml",
+            "agents/configuration/infra",
+            "agents/configuration/image",
+            "agents/configuration/requirements",
+            "agents/configuration/entrypoint",
+            "agents/configuration/env",
+            "agents/configuration/additional_paths",
+            "agents/configuration/download_files",
+            "agents/configuration/post_build_cmds"
+            
+          ]
+        }
+      ]
+    },
+    {
+      "group": "CLI",
+      "pages": [
+        "cli/overview",
+        "cli/init",
+        "cli/apply",
+        "cli/run",
+        "cli/build",
+        "cli/delete"
       ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "github": "https://github.com/runprism/alto"
   }
 }
