@@ -15,7 +15,7 @@
       "to": "#83B6B9"
     }
   },
-  "versions": ["v0.0.5"],
+  "versions": ["v0.0.6", "v0.0.5"],
   "topbarLinks": [
     {
       "name": "Support",
@@ -37,7 +37,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": [ "welcome", "quickstart"]
+      "pages": [ "welcome/v0.0.6/welcome", "welcome/v0.0.5/welcome", "quickstart"]
     },
     {
       "group": "Agents",
