@@ -15,7 +15,7 @@
       "to": "#83B6B9"
     }
   },
-  "versions": ["v0.0.6", "v0.0.5"],
+  "versions": ["v0.0.7", "v0.0.6", "v0.0.5"],
   "topbarLinks": [
     {
       "name": "Support",
@@ -37,7 +37,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": [ "welcome/v0.0.6/welcome", "welcome/v0.0.5/welcome", "quickstart"]
+      "pages": [ "welcome/v0.0.7/welcome", "welcome/v0.0.6/welcome", "welcome/v0.0.5/welcome", "quickstart"]
     },
     {
       "group": "Agents",
@@ -65,12 +65,37 @@
       "group": "CLI",
       "pages": [
         "cli/overview",
-        "cli/init",
-        "cli/apply",
-        "cli/run",
-        "cli/build",
-        "cli/delete"
-      ]
+        "cli/v0.0.7/init",
+        "cli/v0.0.7/apply",
+        "cli/v0.0.7/run",
+        "cli/v0.0.7/build",
+        "cli/v0.0.7/delete"
+      ],
+      "version": "v0.0.7"
+    },
+    {
+      "group": "CLI",
+      "pages": [
+        "cli/overview",
+        "cli/v0.0.6/init",
+        "cli/v0.0.6/apply",
+        "cli/v0.0.6/run",
+        "cli/v0.0.6/build",
+        "cli/v0.0.6/delete"
+      ],
+      "version": "v0.0.6"
+    },
+    {
+      "group": "CLI",
+      "pages": [
+        "cli/overview",
+        "cli/v0.0.6/init",
+        "cli/v0.0.6/apply",
+        "cli/v0.0.6/run",
+        "cli/v0.0.6/build",
+        "cli/v0.0.6/delete"
+      ],
+      "version": "v0.0.5"
     }
   ],
   "footerSocials": {
