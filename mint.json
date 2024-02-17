@@ -15,7 +15,7 @@
       "to": "#83B6B9"
     }
   },
-  "versions": ["v0.0.7", "v0.0.6", "v0.0.5"],
+  "versions": ["v0.0.8", "v0.0.7", "v0.0.6", "v0.0.5"],
   "topbarLinks": [
     {
       "name": "Support",
@@ -37,29 +37,60 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": [ "welcome/v0.0.7/welcome", "welcome/v0.0.6/welcome", "welcome/v0.0.5/welcome", "quickstart"]
+      "pages": [ "welcome/v0.0.8/welcome", "welcome/v0.0.7/welcome", "welcome/v0.0.6/welcome", "welcome/v0.0.5/welcome", "quickstart"]
     },
     {
       "group": "Agents",
       "pages": [
         "agents/overview",
+        "agents/configuration/introduction",
         {
           "group": "Configuration",
           "pages": [
-            "agents/configuration/introduction",
-            "agents/configuration/jinja_yaml",
-            "agents/configuration/infra",
-            "agents/configuration/image",
-            "agents/configuration/requirements",
-            "agents/configuration/entrypoint",
-            "agents/configuration/env",
-            "agents/configuration/additional_paths",
-            "agents/configuration/download_files",
-            "agents/configuration/post_build_cmds"
-            
+            "agents/configuration/v0.0.8/jinja_yaml",
+            "agents/configuration/v0.0.8/infra",
+            "agents/configuration/v0.0.8/image",
+            "agents/configuration/v0.0.8/requirements",
+            "agents/configuration/v0.0.8/entrypoint",
+            "agents/configuration/v0.0.8/env",
+            "agents/configuration/v0.0.8/mounts",
+            "agents/configuration/v0.0.8/artifacts",
+            "agents/configuration/v0.0.8/post_build_cmds",
+
+            "agents/configuration/v0.0.7/jinja_yaml",
+            "agents/configuration/v0.0.7/infra",
+            "agents/configuration/v0.0.7/image",
+            "agents/configuration/v0.0.7/requirements",
+            "agents/configuration/v0.0.7/entrypoint",
+            "agents/configuration/v0.0.7/env",
+            "agents/configuration/v0.0.7/additional_paths",
+            "agents/configuration/v0.0.7/download_files",
+            "agents/configuration/v0.0.7/post_build_cmds",
+
+            "agents/configuration/v0.0.6/jinja_yaml",
+            "agents/configuration/v0.0.6/infra",
+            "agents/configuration/v0.0.6/image",
+            "agents/configuration/v0.0.6/requirements",
+            "agents/configuration/v0.0.6/entrypoint",
+            "agents/configuration/v0.0.6/env",
+            "agents/configuration/v0.0.6/additional_paths",
+            "agents/configuration/v0.0.6/download_files",
+            "agents/configuration/v0.0.6/post_build_cmds"
           ]
         }
       ]
+    },
+    {
+      "group": "CLI",
+      "pages": [
+        "cli/overview",
+        "cli/v0.0.8/init",
+        "cli/v0.0.8/apply",
+        "cli/v0.0.8/run",
+        "cli/v0.0.8/build",
+        "cli/v0.0.8/delete"
+      ],
+      "version": "v0.0.8"
     },
     {
       "group": "CLI",

@@ -1,0 +1,118 @@
+---
+title: 'download_files'
+description: The `download_files` key defines files to download after code execution
+version: 'v0.0.6'
+---
+
+## Overview
+  ```yaml alto.yml
+  ...
+  download_files:
+    - "output1.csv"
+    - "output2.csv"
+  ...
+  ```
+
+  The `download_files` key should contain the list of files to download from the cloud
+  environment after the code successfully executes.
+
+  Alto runs your code on the cloud environment exactly as it runs on your local machine —
+  so, if your code outputs files when run locally, those will also get created within your
+  cloud environment. The `download_files` allows you to access these files.
+
+  For example, suppose your script looks something like this (this pulls top stories
+  from the HackerNews API):
+
+  <Accordion title="hacker_news.py">
+  ```python hacker_news.py
+  from pathlib import Path
+  import requests
+  from typing import List
+
+  def get_live_data_item_ids(base_url: str, hn_stories: str, thres: int) -> List[str]:
+      """
+      Get item IDs associated with `hn_stories`. Note that `hn_stories` must be an
+      acceptable GET request via the Hacker News live data API. See more here:
+      https://hackernews.api-docs.io/v0/live-data/max-item-id
+
+      args:
+          base_url: URL used for API requests
+          hn_stories: live data GET request
+          thres: how many IDs to retrieve; -1 means all IDs are retrieved
+      returns:
+          list of Hacker News story IDs
+      """
+      stories_url = base_url + hn_stories
+      payload = {}
+      response = requests.request('GET', stories_url, data=payload)
+      story_ids_txt = response.text
+      story_ids_list = story_ids_txt.replace('[', '').replace(']', '').replace(' ', '').split(',')
+      if thres==-1:
+          return story_ids_list
+      else:
+          return story_ids_list[:thres]
+
+
+  def get_story_from_id(id_url: str, item_id: str) -> pd.DataFrame:
+      """
+      In the Hacker News API, stories, comments, jobs, Ask HNs and even polls are just items. 
+      They're identified by their ids, which are unique integers, and live under
+      https://hacker-news.firebaseio.com/v0/item/{item-id}
+
+      args:
+          id_url: URL used for requesting items from individual ID
+          id: item ID represented as a string
+      returns:
+          response JSON as a dictionary
+      """
+      # url = prism_project.ID_URL
+      payload = "{}"
+      response = requests.request("GET", id_url.format(item_id=item_id), data=payload)
+      response_dict = json.loads(response.text)
+
+      # Convert dictionary to a DataFrame
+      df = pd.DataFrame({k: [v] for k,v in response_dict.items()})
+
+      # Confirm df has one row
+      assert df.shape[0]==1, prism_project.PRISM_LOGGER.error("bad response dictionary")
+      return df
+
+
+  if __name__ == "__main__":
+      # Constants
+      BASE_URL = "https://hacker-news.firebaseio.com/v0/"
+      ID_URL = "https://hacker-news.firebaseio.com/v0/item/{item_id}.json"
+      REQUEST = 'topstories.json'
+      STORY_THRESHOLD = 100000
+      UPVOTE_THRESH = 50
+      COMMENT_THRESH = 1
+      
+      # IDs
+      live_data_ids = get_live_data_item_ids(BASE_URL, REQUEST, STORY_THRESHOLD)
+      print(f'Extracted IDs for `{REQUEST}`')
+      
+      # Stories
+      temp_dfs = []
+      for storyid in live_data_ids:
+          temp_story_df = self.get_story_from_id(ID_URL, str(storyid))
+          temp_dfs.append(temp_story_df)
+      live_data_df = pd.concat(temp_dfs)
+      print(f'Got stories for `{REQUEST}`')
+      
+      # Write the data
+      live_data_df.to_csv(Path(__file__).parent / 'output' / 'topstores.csv')
+  ```
+  </Accordion>
+
+  The script writes a file to a local folder called `output` that lives in the same
+  directory as the script. The file is called `topstories.csv`.
+
+  If we wanted to create this file using Alto and then download it after it was
+  successfully created, we could specify our configuration as follows:
+
+  ```yaml alto.yml
+  ...
+  download_files:
+    - "output/topstories.csv"
+  ...
+  ```

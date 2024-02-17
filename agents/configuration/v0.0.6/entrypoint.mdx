@@ -1,0 +1,81 @@
+---
+title: 'entrypoint'
+description: The `entrypoint` key defines how your code should be run
+version: 'v0.0.6'
+---
+
+## Overview
+  ```yaml alto.yml
+  ...
+  entrypoint:
+    type: script
+    cmd: python <script name>.py --arg1 VALUE1
+  ...
+  ```
+
+  The `entrypoint` key should contain a set of key-value pairs that describe how your
+  code should be accessed in your cloud infrastructure. Different entrypoints will have
+  slightly different acceptable key-value pairs; however, they all must have `type`
+  value.
+
+  <Warning>If your `entrypoint` does not contain a `type`, then Alto will throw an error!</Warning>
+
+## Key Specification
+
+  Different entrypoints have slightly different key-value specifications. We list these
+  below:
+
+  <Accordion title="type: script">
+    - `src`: the directory containing the script to execute. This directory should be
+    specified relative to the configuration YAML. This is an **optional** field.
+    - `cmd`: the command used to execute the script, e.g., `python main.py`.
+
+    Example:
+    ```yaml alto.yml
+    ...
+      entrypoint:
+        type: "script"
+        cmd: "python main.py"
+    ...
+    ```
+  </Accordion>
+
+  <Accordion title="type: function">
+    - `src`: the directory containing the script to execute. This directory should be
+    specified relative to the configuration YAML. This is an **optional** field.
+    - `cmd`: the command used to execute the script, formatted as `<module_name>.<function_name>`
+    - `kwargs`: the function's keyword arguments formatted as a set of key-value pairs.
+
+    Example:
+    ```yaml alto.yml
+    ...
+      entrypoint:
+        type: "function"
+        cmd: "main.write_txt_file"
+        kwargs:
+          fname: "test.txt"
+    ...
+    ```
+  </Accordion>
+
+  <Accordion title="type: jupyter">
+
+    - `src`: the directory containing the script to execute. This directory should be
+    specified relative to the configuration YAML. This is an **optional** field.
+    - `cmd`: the notebook to execute, formatted as `<notebook_name>.ipynb`
+    - `kernel`: the Jupyter runtime environment. The default is `python3`
+    - `params`: the notebooks parameters formatted as a set of key-value pairs. Notebooks
+      can be parametrized with Papermill! Check out the documentation [here](https://papermill.readthedocs.io/en/latest/usage-parameterize.html).
+
+    Example:
+    ```yaml alto.yml
+    ...
+      entrypoint:
+        type: "jupyter"
+        cmd: "main.ipynb"
+        params:
+          alpha: 0.1
+          ratio: 0.1
+    ...
+    ```
+  </Accordion>

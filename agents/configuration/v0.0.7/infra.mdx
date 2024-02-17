@@ -1,0 +1,175 @@
+---
+title: 'infra'
+description: The `infra` key defines the type of infrastructure on which to run your code
+version: 'v0.0.7'
+---
+
+## Overview
+  ```yaml alto.yml
+  ...
+    infra:
+      type: ec2  
+      instance_type: t2.micro
+      ami_image: ami-0889a44b331db0194
+  ...
+  ```
+
+  The `infra` key should contain a set of key-value pairs that describe infrastructure on
+  which to run your code. Different kinds of infrastructures will have different
+  acceptable key-value pairs; however, they all must have  a value for `type`.
+
+  <Warning>
+    If your `infra` does not contain a `type` key, then Alto will throw an error!
+  </Warning>
+
+  Next, we cover the specific configurations for the various accepted `type` values.
+
+## EC2
+
+  ### Prerequisites
+  EC2 agents rely on the boto3 and botocore packages. These require you to set up
+  authentication credentials for your AWS account. More information can be found [here](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#configuration).
+
+  <Warning>You must configure your Boto3 credentials in order to use EC2 agents.</Warning>
+
+  ### IAM permissions
+  EC2 agents require your AWS credentials to list, modify, create, and delete certain
+  resources (e.g., key pairs, security groups, EC2 instances, etc.). You'll need to make
+  sure your account has the necessary privileges to create EC2 instances, security groups,
+  and key-pairs. Contact your account administrator to help out with this.
+
+  You can use the following policy document to provision your account with the necessary
+  permissions:
+
+  <Accordion title="IAM policy document">
+    ```json
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Sid": "AllowGetAccessKeyLastUsed",
+              "Effect": "Allow",
+              "Action": "iam:GetAccessKeyLastUsed",
+              "Resource": "arn:aws:iam::*:user/${aws:username}"
+          },
+          {
+              "Sid": "AllowGetUser",
+              "Effect": "Allow",
+              "Action": "iam:GetUser",
+              "Resource": "arn:aws:iam::*:user/${aws:username}"
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "ec2:Describe*",
+                  "ec2:GetConsole*"
+              ],
+              "Resource": "*"
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "ec2:RunInstances",
+                  "ec2:CreateTags"
+              ],
+              "Resource": [
+                  "arn:aws:ec2:*:*:subnet/*",
+                  "arn:aws:ec2:*:*:network-interface/*",
+                  "arn:aws:ec2:*:*:instance/*",
+                  "arn:aws:ec2:*:*:volume/*",
+                  "arn:aws:ec2:*::image/ami-*",
+                  "arn:aws:ec2:*:*:key-pair/*",
+                  "arn:aws:ec2:*:*:security-group/*"
+              ]
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "ec2:CreateKeyPair",
+                  "ec2:DeleteKeyPair",
+                  "ec2:CreateSecurityGroup",
+                  "ec2:DeleteSecurityGroup",
+                  "ec2:DescribeSecurityGroups",
+                  "ec2:DescribeSecurityGroupRules",
+                  "ec2:DescribeTags"
+              ],
+              "Resource": "*"
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "ec2:AuthorizeSecurityGroupIngress",
+                  "ec2:RevokeSecurityGroupIngress",
+                  "ec2:AuthorizeSecurityGroupEgress",
+                  "ec2:RevokeSecurityGroupEgress",
+                  "ec2:ModifySecurityGroupRules",
+                  "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
+                  "ec2:UpdateSecurityGroupRuleDescriptionsEgress"
+              ],
+              "Resource": [
+                  "arn:aws:ec2:*:*:security-group/*"
+              ]
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "ec2:ModifySecurityGroupRules"
+              ],
+              "Resource": [
+                  "arn:aws:ec2:*:*:security-group-rule/*"
+              ]
+          }
+      ]
+    }
+    ```
+    </Accordion>
+
+    ### Key Specification
+    The EC2 `infra` accepts the following keys:
+
+    #### Required keys
+    
+      - `type`: this should always be `ec2`
+      - `instance_type`: the EC2 instance type. This defaults to `t2.micro`. The list of all
+        available EC2 instance types can be found here.
+      - `ami_image`: the Amazon machine image to use. This defaults to ami-0889a44b331db0194.
+        You should be able to find a list of available AMIs for your region via the AWS
+        console (EC2 >> Images >> AMI Catalog).
+    
+      <Warning>Your `ami_image`  must be an Amazon Linux AMI. We're working on adding support for
+      other Linux-based images (e.g., Debian, Ubuntu, etc.)</Warning>
+
+    #### Optional keys
+      - `python_version`: the Python version to use. This is **optional**. If this isn't specified,
+      this your code will run using the Python version native to the EC2 instance. The latest
+      version is always used, i.e.,:
+        - `python_version: 3` --> version `3.12.0` is used
+        - `python_version: 3.1` --> version `3.1.5` is used
+        - `python_version: 3.11.6` --> version `3.11.6` is used
+
+      <Warning>Installing a custom python_version takes a while! If you're still experimenting,
+      make sure to use the `--no-delete-success` and `--no-delete-failure` flags to preserve your
+      cloud environment.</Warning>
+
+      <Note>**Important:** `python_version` will be ignored if you use an image container to
+      run your code.</Note>
+
+    ### Example
+    Here's a simple configuration for an EC2 agent:
+    
+    ```yaml alto.yml
+    my-new-ec2-agent:
+      infra:
+        type: ec2
+        instance_type: t2.micro
+        ami_image: ami-01c647eace872fc02
+        python_version: 3.11
+      entrypoint:
+        type: function
+        cmd: main.write_txt_file
+      requirements: requirements.txt
+      env:
+        AWS_ACCESS_KEY_ID: "{{ env('AWS_ACCESS_KEY_ID') }}"
+        AWS_SECRET_ACCESS_KEY: "{{ env('AWS_SECRET_ACCESS_KEY') }}"
+        AWS_DEFAULT_REGION: "{{ env('AWS_DEFAULT_REGION') }}"
+    ```

@@ -1,0 +1,45 @@
+---
+title: 'delete'
+description: "Delete all infrastructure resources with `alto delete`"
+version: 'v0.0.8'
+---
+
+## Usage
+
+  `alto delete` deletes all resources associated with your cloud agent
+
+  ```html
+  Usage: alto delete [OPTIONS]                                                                                                                
+                                                                                                                                              
+  Delete your agent.                                                                                                                          
+                                                                                                                                              
+  Examples:                                                                                                                                   
+                                                                                                                                              
+    • alto delete -f ./ec2.yml                                                                                                                 
+                                                                                                                                              
+  ╭- Options --------------------------------------------------------------------------------------------------------------------------------╮
+  | *  --file       -f  TEXT                     Alto configuration file.                                                                    |
+  |                                              [required]                                                                                  |
+  |    --name           TEXT                     Name of agent within Alto configuration file.                                               |
+  |    --verbose        -v                       Log all activity after command execution according to --log-level. [default: False]         |
+  |    --log-level  -l  [info|warn|error|debug]  Set the log level. [default: info]                                                          |
+  |    --help                                    Show this message and exit.                                                                 |
+  ╰------------------------------------------------------------------------------------------------------------------------------------------╯
+  ```
+
+## Example
+
+  Here's what the output looks like (using an EC2 agent as an example):
+
+  ```
+  $ alto delete -f nomad.yml --verbose
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Deleting key-pair my-new-ec2-agent at /.nomad/my-new-ec2-agent.pem
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Deleting instance i-XXXXXXXXXXXXXXXXX
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Encountered `DependencyViolation` when deleting security group sg-XXXXXXXXXXXXXXXXX...waiting 5 seconds and trying again
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Encountered `DependencyViolation` when deleting security group sg-XXXXXXXXXXXXXXXXX...waiting 5 seconds and trying again
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Encountered `DependencyViolation` when deleting security group sg-XXXXXXXXXXXXXXXXX...waiting 5 seconds and trying again
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Encountered `DependencyViolation` when deleting security group sg-XXXXXXXXXXXXXXXXX...waiting 5 seconds and trying again
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Encountered `DependencyViolation` when deleting security group sg-XXXXXXXXXXXXXXXXX...waiting 5 seconds and trying again
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Encountered `DependencyViolation` when deleting security group sg-XXXXXXXXXXXXXXXXX...waiting 5 seconds and trying again
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[delete] | Deleting security group sg-XXXXXXXXXXXXXXXXX
+  ```

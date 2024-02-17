@@ -1,0 +1,19 @@
+---
+title: 'mounts'
+description: The `mounts` key defines file paths to copy onto your infrastructure
+version: 'v0.0.8'
+---
+
+## Overview
+  ```yaml alto.yml
+  ...
+  mounts:
+    - "../data/"
+  ...
+  ```
+
+  The `mounts` key contains a list of paths to copy onto your infrastructure.
+
+  <Note>By default, the working directory (i.e., the directory with your YAML configuration
+  file) is copied onto your infrastructure. The `mounts` key can be used to
+  copy folders and/or files *outside* of your working directory onto your infrastructure.</Note>

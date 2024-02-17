@@ -1,0 +1,16 @@
+---
+title: 'post_build_cmds'
+description: The `post_build_cmds` key defines custom actions
+version: 'v0.0.6'
+---
+
+## Overview
+  ```yaml alto.yml
+  ...
+  post_build_cmds:
+    - "sudo yum install gcc"
+    ...
+  ```
+
+  The `post_build_cmds` key should contain any custom actions to perform within your
+  infrastructure build (e.g., installing additional Linux packages).
