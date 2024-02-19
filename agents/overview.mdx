@@ -5,14 +5,19 @@ title: 'Overview'
   Alto was designed to be extraordinarily lightweight — that way, users can focus on
   writing their core code rather than fiddling with their cloud environments.
 
-  One of the main concepts in Alto is **agents**. Agents are custom runtime environments in
-  the cloud. The configuration for agents is defined in a YAML file, and it's designed to
-  be (mostly) cloud-agnostic. That is, the configuration file shouldn't change
-  dramatically whether you're running your code on an EC2 instance, a EMR cluster, or a
-  GCP virtual machine.
+  One of the main concepts in Alto is **agents**. Agents are custom runtime environments
+  in the cloud. The configuration for agents is defined in a
+  [YAML](/agents/configuration/v0.0.8/jinja_yaml) file, and it's designed to be (mostly)
+  cloud-agnostic. That is, the configuration file shouldn't change dramatically whether
+  you're running your code on an EC2 instance, a EMR cluster, or a GCP virtual machine.
+
+  <Note>
+  Agents are currently configured using YAML. In the future, users will be able to
+  express agent and image configurations entirely in code.
+  </Note>
 
   Alto currently supports the following agents:
-  - EC2
+  - [EC2](/agents/configuration/v0.0.8/infra/ec2)
 
   We're just getting started, so please let us know if you use a cloud environment that
   isn't current supported!
