@@ -1,0 +1,100 @@
+---
+title: 'apply'
+description: "Build your infrastructure using `alto apply`"
+version: 'v0.0.8'
+---
+
+## Usage
+  `alto apply` builds (or rebuilds) your agent using the information in your agent's
+  configuration YAML.
+
+  <Warning>`alto apply` does NOT execute your code on your cloud environment. It simply
+  builds the environment itself. To execute your code, use either [`alto run`](/cli/run) or [`alto
+  build`](/cli/build).</Warning>
+
+  ```html
+  Usage: alto apply [OPTIONS]                                                                                                                     
+                                                                                                                                                 
+  Build your agent using a configuration YAML.                                                                                                    
+                                                                                                                                                  
+  Examples:                                                                                                                                       
+                                                                                                                                                  
+    • alto apply -f ./ec2.yml                                                                                                                      
+    • alto apply -f ./ec2.yml --whitelist-all                                                                                                      
+                                                                                                                                                  
+  ╭- Options --------------------------------------------------------------------------------------------------------------------------------╮
+  | *  --file           -f  TEXT                     Alto configuration file.                                                                |
+  |                                                  [required]                                                                              |
+  |    --name               TEXT                     Name of agent within Alto configuration file.                                           |
+  |    --verbose        -v                           Log all activity after command execution according to --log-level. [default: False]     |
+  |    --log-level      -l  [info|warn|error|debug]  Set the log level. [default: info]                                                      |
+  |    --whitelist-all                               Whitelist all IP addresses. If False, then only whitelist your current IP address.      |
+  |                                                  [default: False]                                                                        |
+  |    --help                                        Show this message and exit.                                                             |
+  ╰------------------------------------------------------------------------------------------------------------------------------------------╯
+  ```
+
+  Here's what `alto apply` does under the hood:
+  
+  1. Parses your project's configuration YAML and grabs all the necessary data (e.g., the
+  entrypoint code, the additional paths, the bootstrap actions, etc.)
+  2. Securely builds the agent computing environment with all the data identified in
+  step 1. For example, for EC2 instances, Nomad uses the SSH protocol to securely copy
+  all project data into the virtual machine.
+
+  <Note>**Important:** `alto apply` allows you to quickly propagate any local code changes
+  to your cloud environment. So, if you build your agent using `alto apply` and then
+  make some local changes, you can use `alto apply` again to make sure those local
+  changes
+  are reflected in your environment.</Note>
+
+## Example
+  Here's what the output looks like (using an EC2 agent as an example):
+
+  ```
+  $ alto apply -f nomad.yml --verbose
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Created key pair my-new-ec2-agent
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Created security group with ID sg-XXXXXXXXXXXXXXXXX in VPC vpc-XXXXXXXXXXXXXXXXX
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Created EC2 instance with ID i-XXXXXXXXXXXXXXXXX
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Instance i-XXXXXXXXXXXXXXXXX is pending... checking again in 5 seconds
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Instance i-XXXXXXXXXXXXXXXXX is pending... checking again in 5 seconds
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Instance i-XXXXXXXXXXXXXXXXX is pending... checking again in 5 seconds
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Instance i-XXXXXXXXXXXXXXXXX is pending... checking again in 5 seconds
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Instance i-XXXXXXXXXXXXXXXXX is pending... checking again in 5 seconds
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Instance i-XXXXXXXXXXXXXXXXX is pending... checking again in 5 seconds
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | SSH connection refused. Retrying in 5 seconds...
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | SSH connection refused. Retrying in 5 seconds...
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | SSH connection succeeded!
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |    ,     #_
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |    ~\_  ####_        Amazon Linux 2023
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |   ~~  \_#####\
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |   ~~     \###|
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |   ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |    ~~       V~' '->
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |     ~~~         /
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |       ~~._.   _/
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |          _/ _/
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |        _/m/'
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Requirement already satisfied: pip in ./.venv/function/lib/python3.9/site-packages (21.3.1)
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Collecting pip
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |   Downloading pip-23.2.1-py3-none-any.whl (2.1 MB)
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Installing collected packages: pip
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |   Attempting uninstall: pip
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |     Found existing installation: pip 21.3.1
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |     Uninstalling pip-21.3.1:
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  |       Successfully uninstalled pip-21.3.1
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Successfully installed pip-23.2.1
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Collecting boto3 (from -r requirements.txt (line 1))
+  ...
+  ...
+  ...
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Installing collected packages: urllib3, six, jmespath, python-dateutil, botocore, s3transfer, boto3
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Successfully installed boto3-1.28.52 botocore-1.31.52 jmespath-1.0.1 python-dateutil-2.8.2 s3transfer-0.6.2 six-1.16.0 urllib3-1.26.16
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Updating remote project and file paths
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Copied project directory into instance
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Updated environment variable AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXXX
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Updated environment variable AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Updated environment variable AWS_DEFAULT_REGION=XX-XXXX-X
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Done updating remote project and file paths
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[build]  | Pseudo-terminal will not be allocated because stdin is not a terminal.
+  ```

@@ -1,0 +1,43 @@
+---
+title: 'run'
+description: "Run your code on your infrastructure with `alto run`"
+version: 'v0.0.8'
+---
+
+## Usage
+  `alto run` executes your code on your cloud environment. Note that, in order to use
+  `alto run`, you must have build the cloud environment using `alto apply` or `alto
+  build`.
+
+  ```html
+  Usage: alto run [OPTIONS]                                                                                                                   
+                                                                                                                                              
+  Run your project using an agent.                                                                                                            
+                                                                                                                                              
+  Examples:                                                                                                                                   
+                                                                                                                                              
+    • alto run -f ./ec2.yml --no-delete-failure                                                                                                
+    • alto run -f ./ec2.yml --no-delete-success --whitelist-all                                                                                
+                                                                                                                                              
+  ╭- Options --------------------------------------------------------------------------------------------------------------------------------╮
+  | *  --file               -f  TEXT                     Alto configuration file.                                                            |
+  |                                                      [required]                                                                          |
+  |    --name                   TEXT                     Name of agent within Alto configuration file.                                       |
+  |    --verbose            -v                           Log all activity after command execution according to --log-level. [default: False] |
+  |    --log-level          -l  [info|warn|error|debug]  Set the log level. [default: info]                                                  |
+  |    --no-delete-failure                               Preserve the cloud resources after a failed run. [default: False]                   |
+  |    --no-delete-success                               Preserve the cloud resources after a successful run. [default: False]               |
+  |    --whitelist-all                                   Whitelist all IP addresses. If False, then only whitelist your current IP address.  |
+  |                                                      [default: False]                                                                    |
+  |    --help                                            Show this message and exit.                                                         |
+  ╰------------------------------------------------------------------------------------------------------------------------------------------╯
+  ```
+
+## Example
+  `alto run` streams the logs produced by your code in your cloud environment onto your
+  local Terminal. As a result, `alto run` will log (or print) whatever your code does.
+
+  ```
+  $ alto run -f nomad.yml --no-delete-success --verbose
+  <HH:MM:SS> | INFO  | my-new-ec2-agent[run]  | This was logged by my code!
+  ```
