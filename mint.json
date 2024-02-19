@@ -48,7 +48,13 @@
           "group": "Configuration",
           "pages": [
             "agents/configuration/v0.0.8/jinja_yaml",
-            "agents/configuration/v0.0.8/infra",
+            {
+              "group": "infra",
+              "pages": [
+                "agents/configuration/v0.0.8/infra/overview",
+                "agents/configuration/v0.0.8/infra/ec2"
+              ]
+            },
             "agents/configuration/v0.0.8/image",
             "agents/configuration/v0.0.8/requirements",
             "agents/configuration/v0.0.8/entrypoint",

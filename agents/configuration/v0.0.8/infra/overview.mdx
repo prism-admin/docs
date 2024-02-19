@@ -1,0 +1,18 @@
+---
+title: 'Overview'
+description: The `infra` key defines the type of infrastructure on which to run your code
+version: 'v0.0.8'
+---
+
+## Overview
+  The `infra` key should contain a set of key-value pairs that describe infrastructure on
+  which to run your code. Different kinds of infrastructures will have different
+  acceptable key-value pairs; however, they all must have  a value for `type`.
+
+  <Warning>
+    If your `infra` does not contain a `type` key, then Alto will throw an error!
+  </Warning>
+
+  Next, we cover the specific configurations for the various accepted `type` values.
+
+  - [EC2](/agents/configuration/v0.0.8/infra/ec2)

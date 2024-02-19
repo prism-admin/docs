@@ -19,11 +19,11 @@ we'll offer the option for users to run their code on Alto's own infrastructure.
 Here are the main differences between this version and the previous version (```alto v0.0.7```):
   <Accordion title="Additional EC2 protocols">      
     Previously, Alto managed EC2 instances only via the SSH / SCP protocol. Now, users can
-    specify whether they want to use Amazon Systems Manager to manage their instance. AWS
-    Systems Manager requires fewer resources to instantiate and execute commands on an EC2
-    instance.
+    specify whether they want to use Amazon Systems Manager to manage their instance. You can
+    learn more AWS Systems Manager [here](https://aws.amazon.com/systems-manager/).
 
-    This can be specified via the `protocol` key within an EC2 agent's `infra` configuration.
+    This can be specified via the [`protocol`](/agents/configuration/v0.0.8/infra/ec2#optional-keys) 
+    key within an EC2 agent's `infra` configuration.
   </Accordion>
 
 ## Why use Alto?
